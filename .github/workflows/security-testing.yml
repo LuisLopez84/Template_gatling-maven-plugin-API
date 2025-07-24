@@ -52,25 +52,26 @@ jobs:
             echo "::error::Se encontraron vulnerabilidades de alta prioridad en el reporte JSON"
             exit 1
           fi
-      - name: Mostar Resumen de Vulnerabilidades encontradas
-        run: |
-          echo "📊 Resumen de vulnerabilidades encontradas:"
-          echo ""
-            
-          HIGH=$(jq '[.site[].alerts[] | select(.riskcode == "3")] | length' zap_report.json)
-          MEDIUM=$(jq '[.site[].alerts[] | select(.riskcode == "2")] | length' zap_report.json)
-          LOW=$(jq '[.site[].alerts[] | select(.riskcode == "1")] | length' zap_report.json)
-          INFO=$(jq '[.site[].alerts[] | select(.riskcode == "0")] | length' zap_report.json)
-            
-          echo "| Severidad | Cantidad |"
-          echo "|-----------|----------|"
-          echo "| Alta | $HIGH |"
-          echo "| Media | $MEDIUM |"
-          echo "| Baja | $LOW |"
-          echo "| Info | $INFO |"
           
-          echo ""
-          if [ "$HIGH" -gt 0 ]; then
-            echo "::error::Se encontraron $HIGH vulnerabilidades de alta severidad"
-            exit 1
-          fi
+      - name: Mostrar resumen de vulnerabilidades encontradas
+        run: |
+            echo "📊 Resumen de vulnerabilidades encontradas:"
+            echo ""
+      
+            HIGH=$(jq '[.site[].alerts[] | select(.riskcode == "3")] | length' zap_report.json)
+            MEDIUM=$(jq '[.site[].alerts[] | select(.riskcode == "2")] | length' zap_report.json)
+            LOW=$(jq '[.site[].alerts[] | select(.riskcode == "1")] | length' zap_report.json)
+            INFO=$(jq '[.site[].alerts[] | select(.riskcode == "0")] | length' zap_report.json)
+      
+            echo "| Severidad | Cantidad |"
+            echo "|-----------|----------|"
+            echo "| 🔴 Alta   | $HIGH     |"
+            echo "| 🟠 Media  | $MEDIUM   |"
+            echo "| 🟡 Baja   | $LOW      |"
+            echo "| 🔵 Info   | $INFO     |"
+      
+            echo ""
+            if [ "$HIGH" -gt 0 ]; then
+              echo "::error::Se encontraron $HIGH vulnerabilidades de alta severidad"
+              exit 1
+            fi
