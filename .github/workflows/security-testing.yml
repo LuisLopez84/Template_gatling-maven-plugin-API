@@ -52,7 +52,7 @@ jobs:
             echo "::error::Se encontraron vulnerabilidades de alta prioridad en el reporte JSON"
             exit 1
           fi
-      - name: Mostrar resumen de severidades encontradas
+      - name: Mostar Resumen de Vulnerabilidades encontradas
         run: |
           echo "📊 Resumen de vulnerabilidades encontradas:"
           echo ""
@@ -64,11 +64,11 @@ jobs:
             
           echo "| Severidad | Cantidad |"
           echo "|-----------|----------|"
-          echo "| 🔴 Alta   | $HIGH     |"
-          echo "| 🟠 Media  | $MEDIUM   |"
-          echo "| 🟡 Baja   | $LOW      |"
-          echo "| 🔵 Info   | $INFO     |"
-            
+          echo "| Alta      | $HIGH     |"
+          echo "| Media     | $MEDIUM   |"
+          echo "| Baja      | $LOW      |"
+          echo "| Info      | $INFO     |"
+          
           echo ""
           if [ "$HIGH" -gt 0 ]; then
             echo "::error::Se encontraron $HIGH vulnerabilidades de alta severidad"
