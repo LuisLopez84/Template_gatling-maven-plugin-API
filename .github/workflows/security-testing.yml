@@ -1,0 +1,54 @@
+name: security-testing-Load
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_url:
+        description: 'URL objetivo para el escaneo de seguridad'
+        required: true
+        default: 'https://fakestoreapi.com'
+      zap_options:
+        description: 'Opciones adicionales para ZAP'
+        required: false
+        default: '-t 60 -a'
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    name: OWASP ZAP Security Scan
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run OWASP ZAP Baseline Scan using GHCR
+        run: |
+          docker run --rm --user root \
+            -v $(pwd):/zap/wrk/:rw \
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+              -t https://fakestoreapi.com \ 
+              -r zap_report.html \
+              -x zap_report.xml \
+              -J zap_report.json \
+              -I
+      - name: Upload ZAP Reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-security-reports
+          path: |
+            zap_report.html
+            zap_report.md
+            zap_report.json
+          if-no-files-found: warn
+      - name: Check for critical findings in HTML
+        run: |
+          if grep -q "High" zap_report.html; then
+            echo "::error::Se encontraron vulnerabilidades de alta prioridad"
+            exit 1
+          fi
+      - name: Analyze ZAP JSON Report
+        run: |
+          if jq '.site.alerts[] | select(.riskcode=="3")' zap_report.json; then
+            echo "::error::Se encontraron vulnerabilidades de alta prioridad en el reporte JSON"
+            exit 1
+          fi
