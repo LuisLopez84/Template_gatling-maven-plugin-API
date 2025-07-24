@@ -53,6 +53,7 @@ jobs:
             exit 1
           fi
       - name: Mostrar resumen de vulnerabilidades encontradas
+        if: always()
         run: |
           echo "📊 Resumen de vulnerabilidades encontradas:"
           echo ""
