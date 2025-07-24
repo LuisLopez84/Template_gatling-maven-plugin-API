@@ -66,9 +66,9 @@ jobs:
             echo "| Severidad | Cantidad |"
             echo "|-----------|----------|"
             echo "| 🔴 Alta   | $HIGH     |"
-            echo "| 🟠 Media  | $MEDIUM   |"
-            echo "| 🟡 Baja   | $LOW      |"
-            echo "| 🔵 Info   | $INFO     |"
+            echo "| 🔴 Media  | $MEDIUM   |"
+            echo "| 🔴 Baja   | $LOW      |"
+            echo "| 🔴 Info   | $INFO     |"
       
             echo ""
             if [ "$HIGH" -gt 0 ]; then
