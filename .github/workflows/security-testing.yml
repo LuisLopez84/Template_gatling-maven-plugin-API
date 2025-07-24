@@ -22,14 +22,14 @@ jobs:
 
       - name: Run OWASP ZAP Baseline Scan using GHCR
         run: |
-          docker run --rm --user root \
+          docker run --rm --user root\
             -v $(pwd):/zap/wrk/:rw \
-            ghcr.io/zaproxy/zaproxy:stable \
-            zap-baseline.py \
-              -t https://fakestoreapi.com \ 
-              -r zap_report.html \
-              -x zap_report.xml \
-              -J zap_report.json \
+            ghcr.io/zaproxy/zaproxy:stable\
+            zap-baseline.py\
+              -t https://fakestoreapi.com\ 
+              -r zap_report.html\
+              -x zap_report.xml\
+              -J zap_report.json\
               -I
       - name: Upload ZAP Reports
         uses: actions/upload-artifact@v4
@@ -50,5 +50,27 @@ jobs:
         run: |
           if jq '.site.alerts[] | select(.riskcode=="3")' zap_report.json; then
             echo "::error::Se encontraron vulnerabilidades de alta prioridad en el reporte JSON"
+            exit 1
+          fi
+      - name: Mostrar resumen de severidades encontradas
+        run: |
+          echo "📊 Resumen de vulnerabilidades encontradas:"
+          echo ""
+            
+          HIGH=$(jq '[.site[].alerts[] | select(.riskcode == "3")] | length' zap_report.json)
+          MEDIUM=$(jq '[.site[].alerts[] | select(.riskcode == "2")] | length' zap_report.json)
+          LOW=$(jq '[.site[].alerts[] | select(.riskcode == "1")] | length' zap_report.json)
+          INFO=$(jq '[.site[].alerts[] | select(.riskcode == "0")] | length' zap_report.json)
+            
+          echo "| Severidad | Cantidad |"
+          echo "|-----------|----------|"
+          echo "| 🔴 Alta   | $HIGH     |"
+          echo "| 🟠 Media  | $MEDIUM   |"
+          echo "| 🟡 Baja   | $LOW      |"
+          echo "| 🔵 Info   | $INFO     |"
+            
+          echo ""
+          if [ "$HIGH" -gt 0 ]; then
+            echo "::error::Se encontraron $HIGH vulnerabilidades de alta severidad"
             exit 1
           fi
