@@ -1,4 +1,4 @@
-name: Gatling Load Test
+name: Gatling Load Test API
 
 on:
   workflow_dispatch:  # Esto habilita la ejecución manual del pipeline
