@@ -24,12 +24,12 @@ jobs:
         run: |
           docker run --rm --user root\
             -v $(pwd):/zap/wrk/:rw \
-            ghcr.io/zaproxy/zaproxy:stable\
-            zap-baseline.py\
-              -t https://fakestoreapi.com\ 
-              -r zap_report.html\
-              -x zap_report.xml\
-              -J zap_report.json\
+            ghcr.io/zaproxy/zaproxy:stable \
+            zap-baseline.py \
+              -t https://fakestoreapi.com \
+              -r zap_report.html \
+              -x zap_report.xml \
+              -J zap_report.json \
               -I
       - name: Upload ZAP Reports
         uses: actions/upload-artifact@v4
