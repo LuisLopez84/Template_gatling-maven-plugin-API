@@ -23,10 +23,15 @@ Modo de ejecución:
 Se debe ejecutar desde linea de comandos maven (mvn) lado derecho del intellij con la siguiente casúistica:
 
 ./mvnw clean gatling:test -Dgatling.simulationClass=example.RestApiSimulationAll
+
 ./mvnw clean gatling:test -Dgatling.simulationClass=example.PostProductosSimulation
+
 ./mvnw clean gatling:test -Dgatling.simulationClass=example.GetSimulation
+
 ./mvnw clean gatling:test -Dgatling.simulationClass=example.PutSimulation
+
 ./mvnw clean gatling:test -Dgatling.simulationClass=example.DeleteSimulation
+
 
 Aclaración:
 ============================================
