@@ -6,7 +6,7 @@ import io.gatling.javaapi.http.*;
 import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.*;
 
-public class RestApiSimulation extends Simulation {
+public class RestApiSimulationAll extends Simulation {
 
     HttpProtocolBuilder httpProtocol = http.baseUrl("https://fakestoreapi.com")
             .acceptHeader("application/json")
@@ -20,7 +20,7 @@ public class RestApiSimulation extends Simulation {
                             .check(status().is(200))
             );
 
-    // Scenario 2: POST create product
+    // Scenario 2: POST create product sin feeder
     ScenarioBuilder postScenario = scenario("POST Create Product")
             .exec(
                     http("POST new product")
@@ -75,11 +75,11 @@ public class RestApiSimulation extends Simulation {
 
     {
         setUp(
-                getScenario.injectOpen(rampUsers(1).during(30))
-    //            postScenario.injectOpen(rampUsers(4).during(10)),
-    //            putScenario.injectOpen(rampUsers(6).during(10)),
-    //            deleteScenario.injectOpen(rampUsers(8).during(10)),
-    //            getByIdScenario.injectOpen(rampUsers(10).during(10))
+                getScenario.injectOpen(rampUsers(1).during(5)),
+                postScenario.injectOpen(rampUsers(1).during(5)),
+                putScenario.injectOpen(rampUsers(1).during(5)),
+                deleteScenario.injectOpen(rampUsers(1).during(5)),
+                getByIdScenario.injectOpen(rampUsers(1).during(5))
         ).protocols(httpProtocol);
     }
 }
